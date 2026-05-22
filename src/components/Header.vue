@@ -13,6 +13,7 @@ const isloggedIn = ref(false);
       <h1 class="title">Meerkatgram</h1>
     </div>
       <div class="btn-box">
+        <!-- props: 자식:MyButton에 이런 속성으로 하여라 하고 지시(데이터 전달) -->
         <MyButton 
           v-if="!isloggedIn"
           :content="'sign In'"

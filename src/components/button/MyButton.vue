@@ -1,6 +1,10 @@
 <script setup>
-// 프롬스 활용: 자식은 defineProps({})
+// 프롭스 활용: 자식은 defineProps({})
 const props= defineProps({
+  'btnType': {
+    type: String,
+    default: 'button'
+   }, // 'button', 'submit', 'reset'
   'size': String, // 'big', 'midle', 'small'
   'color': String, // 'black', 'white', 'gray'
   'content' : String,
@@ -8,10 +12,10 @@ const props= defineProps({
 </script>
 
 <template>
-   <button type="button" 
-    :class="[props.color, props.size]">
-    {{ props.content }}
-  </button>
+   <button 
+    :type="props.btnType" 
+    :class="[props.color, props.size]"
+    >{{ props.content }}</button>
 </template>
 
 <style scoped>
