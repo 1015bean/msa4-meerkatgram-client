@@ -1,33 +1,47 @@
 <script setup>
 import { ref } from 'vue';
 import MyButton from './button/MyButton.vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '../store/auth/useAuthStore.js';
 
-// todo: 로그인 추가시 변경 필요 START
-const isloggedIn = ref(false);
-// todo: 로그인 추가시 변경 필요 END
+const authStore = useAuthStore();
+const router = useRouter();
+
+//  로그인 화면으로 이동하는 함수
+const redirectLogin = () => {
+  // .replace: url을 히스토리 스택에 추가하지 않고 이동
+  // .push: 히스토리 남기고 이동
+  router.push('/login');
+}
+
+//  메인화면으로 이동하는 함수
+const redirectMain = () => {
+  router.push('/posts');
+}
 </script>
 
 <template>
   <div class="header">
     <div class="title-box">
-      <h1 class="title">Meerkatgram</h1>
+      <h1 class="title" @click="redirectMain">Meerkatgram</h1>
     </div>
       <div class="btn-box">
         <!-- props: 자식:MyButton에 이런 속성으로 하여라 하고 지시(데이터 전달) -->
         <MyButton 
-          v-if="!isloggedIn"
+          v-if="!authStore.isLoggedIn"
+          @click="redirectLogin"
           :content="'sign In'"
           :color="'gray'"
           :size="'small'"
           />
           <MyButton 
-          v-if="!isloggedIn"
+          v-if="!authStore.isLoggedIn"
           :content="'sign Up'"
           :color="'white'"
           :size="'small'"
           />
           <MyButton 
-          v-if="isloggedIn"
+          v-if="authStore.isLoggedIn"
           :content="'Logout'"
           :color="'black'"
           :size="'small'"
@@ -50,6 +64,7 @@ const isloggedIn = ref(false);
 
 .title {
   font-size: 20px;
+  cursor: pointer;
 }
 
 .btn-box {

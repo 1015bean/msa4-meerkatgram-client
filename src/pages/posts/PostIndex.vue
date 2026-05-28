@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import MyButton from '../../components/button/MyButton.vue';
 import usePostIndexStore from '../../store/post/usePostIndexStore';
   
@@ -50,6 +50,9 @@ const getNextPage = async () => {
 
 // 라이프 사이클: 화면 랜딩 시 메소드 실행
 onBeforeMount(postIndexStore.getPostPagination);
+
+// 라이프 사이클: 화면 꺼질 때 postIndex 변수값 초기화
+onBeforeUnmount(postIndexStore.clearPostIndex);
 
 </script>
 
