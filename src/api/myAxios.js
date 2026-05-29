@@ -1,4 +1,7 @@
 import axios from "axios";
+import { useAuthStore } from "../store/auth/useAuthStore";
+import { jwtDecode } from "jwt-decode";
+import dayjs from "dayjs";
 
 const myAxios = axios.create({
   // Axios 호출 시, url 가장 앞부분을 미리 저장해두고 재사용
@@ -13,6 +16,35 @@ const myAxios = axios.create({
   // , credential 정보를 담아서 보낼지 여부를 설정
     // credential 정보: cookies, header Authorization(헤더의 메타 데이터 중 하나, 유저의 권한 정보가 담김) 항목 등등
   withCredentials: true,
+});
+
+
+// .interceptors: 요청이 왔을 때 로직이 실행되기 전에 실행되는 함수
+myAxios.interceptors.request.use(async (config) => {
+  const authStore = useAuthStore();
+  let accessToken = authStore.accessToken;
+  const denyUrl = /^\/api\/reissue-token$/;  // 리트라이 제외 URL 설정
+
+  if(!denyUrl.test(config.url) && authStore.isLoggedIn) {
+    // 엑세스토큰 만료 확인(시간 비교)
+    // : 토큰 정보 추출 > 현재시간 획득 > 토큰 유효시간 획득(5분 빠르게) > 시간 비교
+    const claims = jwtDecode(accessToken);
+    const now = dayjs().unix();
+    const expTime = dayjs.unix(claims.exp).add(-5, 'minute').unix();
+
+    // 토큰 만료시 토큰 재발급
+    if(now >= expTime) {
+      try{
+        await authStore.reissue();
+        accessToken = authStore.accessToken;
+      } catch(error) {
+        console.log(error?.response);
+      }
+    }
+  }
+
+  config.headers.Authorization = `Bearer ${accessToken}`;
+  return config;
 });
 
 export default myAxios;

@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('authStore', () => {
     userInfo.value = null;
   }
 
-    // 리퀘스트받은 정보로 DB데이터 불러오기
+    // loginForm: 리퀘스트받은 정보로 DB데이터 불러오기
   const login = async (loginForm) => {
     try{
       const url = '/api/login';
@@ -43,6 +43,23 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   }
 
+    // 토큰 재발급: 리퀘스트받은 정보로 DB데이터 불러오기
+  const reissue = async () => {
+    try {
+      const url = '/api/reissue-token';
+
+      const res = await myAxios.post(url);
+      const data = res.data.data;
+      accessToken.value = data.accessToken;
+      userInfo.value = data.user;
+      isLoggedIn.value = true;
+      
+    } catch(error) {
+      clearAuthStore();
+      throw error;
+    }
+  }
+
   return {
     // stare
     isLoggedIn,
@@ -53,5 +70,6 @@ export const useAuthStore = defineStore('authStore', () => {
 
     // actions
     login,
+    reissue,
   }
 });
