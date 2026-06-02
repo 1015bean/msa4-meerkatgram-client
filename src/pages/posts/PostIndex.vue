@@ -2,6 +2,7 @@
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import MyButton from '../../components/button/MyButton.vue';
 import usePostIndexStore from '../../store/post/usePostIndexStore';
+import { useRouter } from 'vue-router';
   
 // ----------------------- 스토어로 이관 start --------------------------------------------------
 // 백에서 받아온 데이터를 담아 저장할 변수
@@ -42,10 +43,16 @@ import usePostIndexStore from '../../store/post/usePostIndexStore';
 
 // store 사용
 const postIndexStore = usePostIndexStore();
+const router = useRouter();
 
 // 다음 페이지 불러오는 함수
 const getNextPage = async () => {
   await postIndexStore.paginationProcess(postIndexStore.getNextPageNumber);
+}
+
+// 상세 게시글 page로 이동하는 함수
+const redirectShow = (id) => {
+  router.push(`/posts/${id}`);
 }
 
 // 라이프 사이클: 화면 랜딩 시 메소드 실행
@@ -63,6 +70,7 @@ onBeforeUnmount(postIndexStore.clearPostIndex);
       :key="item.id"
       class="card"
       :style="{backgroundImage: `url(${item.image})`}"
+      @click="redirectShow(item.id)"
     ></div>
   </div>
   <MyButton

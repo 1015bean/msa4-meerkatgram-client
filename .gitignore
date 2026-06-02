@@ -27,3 +27,5 @@ src/assets
 *.njsproj
 *.sln
 *.sw?
+*-doc/
+*.md

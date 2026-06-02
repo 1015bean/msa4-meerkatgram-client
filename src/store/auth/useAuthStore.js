@@ -56,8 +56,20 @@ export const useAuthStore = defineStore('authStore', () => {
       
     } catch(error) {
       clearAuthStore();
-      throw error;
     }
+  }
+
+  const logout = async () => {
+    try{
+      const url = '/api/logout';
+
+      await myAxios.post(url);
+    } catch(error) {
+      console.log(error);
+    } finally {
+      clearAuthStore();
+    }
+    
   }
 
   return {
@@ -71,5 +83,6 @@ export const useAuthStore = defineStore('authStore', () => {
     // actions
     login,
     reissue,
+    logout
   }
 });

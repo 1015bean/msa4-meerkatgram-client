@@ -32,8 +32,8 @@ const usePostIndexStore = defineStore("postIndex", () => {
         const url = '/api/posts';
         const params = {
           page,
-        };
-    
+        };    
+
         // 백엔드에 데이터 요청해 변수에 저장
         const res = await myAxios.get(url, {params});
         // console.log(res.data);  // 엑시오스가 데이터 잘 받아오는지 확인

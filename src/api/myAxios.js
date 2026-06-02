@@ -19,8 +19,9 @@ const myAxios = axios.create({
 });
 
 
-// .interceptors~: 요청이 가는 중에, 원하는 로직이 실행되기 전에 먼저 실행되는 함수
-// config: 리퀘스트하는 정보가 포괄적으로 담긴 객체
+// 인터셉터: 엑세스토큰 만료 시 리이슈하는 로직
+  // .interceptors~: 요청이 가는 중에, 원하는 로직이 실행되기 전에 먼저 실행되는 함수
+  // config: 리퀘스트하는 정보가 포괄적으로 담긴 객체
 myAxios.interceptors.request.use(async (config) => {
   const authStore = useAuthStore();
   let accessToken = authStore.accessToken;
@@ -45,8 +46,12 @@ myAxios.interceptors.request.use(async (config) => {
     }
   }
 
-  // 인터셉터 처리는 끝났구요. 여기 엑세스토큰이랑 리쿼스트 정보 드릴게요 하려던 로직 실행하세요.
-  config.headers.Authorization = `Bearer ${accessToken}`;
+  // 액세스토큰 값이 정상적으로 존재할 경우
+  if(accessToken) {
+    // 인터셉터 처리는 끝났구요. 여기 엑세스토큰이랑 리쿼스트 정보 드릴게요(Bearer형태로) 하려던 로직 실행하세요.
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  
   return config;
 });
 

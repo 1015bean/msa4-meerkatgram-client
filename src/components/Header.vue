@@ -18,24 +18,34 @@ const redirectLogin = () => {
 const redirectMain = () => {
   router.push('/posts');
 }
+
+const logout = async () => {
+  await authStore.logout();
+  router.replace('/');
+}
+
+const redirectRegistration = () => {
+  router.push('/registration');
+}
 </script>
 
 <template>
   <div class="header">
     <div class="title-box">
-      <h1 class="title" @click="redirectMain">Meerkatgram</h1>
+      <h1 class="title" @click="redirectMain()">Meerkatgram</h1>
     </div>
       <div class="btn-box">
         <!-- props: 자식:MyButton에 이런 속성으로 하여라 하고 지시(데이터 전달) -->
         <MyButton 
           v-if="!authStore.isLoggedIn"
-          @click="redirectLogin"
+          @click="redirectLogin()"
           :content="'sign In'"
           :color="'gray'"
           :size="'small'"
           />
           <MyButton 
           v-if="!authStore.isLoggedIn"
+          @click="redirectRegistration"
           :content="'sign Up'"
           :color="'white'"
           :size="'small'"
@@ -45,6 +55,7 @@ const redirectMain = () => {
           :content="'Logout'"
           :color="'black'"
           :size="'small'"
+          @click="logout()" 
           />
       </div>
   </div>
