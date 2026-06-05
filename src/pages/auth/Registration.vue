@@ -5,6 +5,7 @@ import MyInput from '../../components/input/MyInput.vue';
 import { useFileStore } from '../../store/file/useFileStore.js';
 import { useAuthStore } from '../../store/auth/useAuthStore.js';
 import { useRouter } from 'vue-router';
+import registrationValidator from '../../util/vaildator/domain/auth/registrationValidator.js';
 
 const fileStore = useFileStore();
 const authStore = useAuthStore();
@@ -20,8 +21,25 @@ const registrationData = reactive({
   profile: '',
 })
 
+
 // form @submit 시 실행할 함수
 const handleSubmit = async () => {
+  // 유효성 검사
+  const validationList = [
+    registrationValidator.email(registrationData.email),
+    registrationValidator.password(registrationData.password),
+    registrationValidator.passwordChk(registrationData.password, registrationData.passwordChk),
+    registrationValidator.nick(registrationData.nick),
+    registrationValidator.profile(registrationData.profile),
+  ];
+
+  const errorList = validationList.filter(val => val);
+
+  if(errorList.length > 0) {
+    alert(errorList.join('\n'));
+    return;
+  }
+
   try {
     await authStore.registration(registrationData)
     alert("회원가입에 성공했습니다.");
