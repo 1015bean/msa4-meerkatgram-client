@@ -1,12 +1,14 @@
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePostShowStore } from '../../store/post/usePostShowStore';
+import { useAuthStore } from '../../store/auth/useAuthStore';
 
 
 const route = useRoute();
 const router = useRouter(); 
 const postShowStore = usePostShowStore();
+const authStore = useAuthStore();
 
 // (route.params.id): 세그먼트 파라미터로 id 받아옴
 onBeforeMount(async () => {
@@ -18,13 +20,19 @@ onBeforeMount(async () => {
     router.replace('/');
   }
 })
+onBeforeUnmount(postShowStore.clearPostShow);
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="postShowStore.post">
     <div class="image" :style="{backgroundImage: `url(${postShowStore.post.image})`}"></div>
     <div class="option-box">
-      <div class="delete-icon"></div>
+      <div class="deleted-box">
+        <div 
+          class="delete-icon"
+          v-if="postShowStore.post.userId === authStore.userInfo.id"
+        ></div>
+      </div>
       <div class="like-box">
         <span>1919</span>
         <div class="like-icon"></div>
