@@ -44,7 +44,7 @@ const usePostIndexStore = defineStore("postIndex", () => {
         currentPage.value++;
       } catch(error) {
         console.error(error);
-        useMyErrorStore().setErrorInfo(error);
+        throw error;
       }
 
     }

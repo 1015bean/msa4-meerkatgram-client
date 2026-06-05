@@ -3,6 +3,8 @@ import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import MyButton from '../../components/button/MyButton.vue';
 import usePostIndexStore from '../../store/post/usePostIndexStore';
 import { useRouter } from 'vue-router';
+import MyError from '../errors/MyError.vue';
+import useMyErrorStore from '../../store/errors/useMyErrorStore.js';
   
 // ----------------------- 스토어로 이관 start --------------------------------------------------
 // 백에서 받아온 데이터를 담아 저장할 변수
@@ -44,10 +46,20 @@ import { useRouter } from 'vue-router';
 // store 사용
 const postIndexStore = usePostIndexStore();
 const router = useRouter();
+const myErrorStore = useMyErrorStore();
+
+const getPagination = async (page = 1) => {
+  try {
+    await postIndexStore.getPostPagination(page);
+  } catch (error) {
+    myErrorStore.setErrorInfo(error);
+    router.replace('/error');
+  }
+}
 
 // 다음 페이지 불러오는 함수
 const getNextPage = async () => {
-  await postIndexStore.paginationProcess(postIndexStore.getNextPageNumber);
+  await getPagination(postIndexStore.getNextPageNumber);
 }
 
 // 상세 게시글 page로 이동하는 함수
@@ -56,7 +68,7 @@ const redirectShow = (id) => {
 }
 
 // 라이프 사이클: 화면 랜딩 시 메소드 실행
-onBeforeMount(postIndexStore.getPostPagination);
+onBeforeMount(getPagination);
 
 // 라이프 사이클: 화면 꺼질 때 postIndex 변수값 초기화
 onBeforeUnmount(postIndexStore.clearPostIndex);

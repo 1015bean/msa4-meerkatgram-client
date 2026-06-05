@@ -45,6 +45,12 @@ const routes = [
     path: '/posts/:id',
     component: PostShow,
     meta: setMeta(true, false),
+  },
+  // 에러 관련
+  {
+    path: '/error',
+    component: MyError,
+    meta: setMeta(false, false),
   }
 ];
 

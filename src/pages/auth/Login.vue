@@ -6,9 +6,11 @@ import MyStrikeThroughBehindeWord from '../../components/decoration/MyStrikeThro
 import { useAuthStore } from '../../store/auth/useAuthStore.js';
 import { useRouter } from 'vue-router';
 import loginValidator from '../../util/vaildator/domain/auth/loginValidator.js';
+import useMyErrorStore from '../../store/errors/useMyErrorStore.js';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const myErrorStore = useMyErrorStore();
 
 // 자식(<MyInput>)으로부터 받아야하므로 데이터바인딩 객체:reactive() 사용
 const loginForm = reactive({
@@ -24,8 +26,20 @@ const handleSubmit = async () => {
 
   if(!resultValidationEmail && !resultValidationPassword) {
     // 유효성 검사 통과 패턴
-    await authStore.login(loginForm);
-    router.replace('/posts');
+    try {
+      await authStore.login(loginForm);
+      router.replace('/posts');
+    
+    } catch (error) {
+      if(error.response){
+        if(error.response.data.code === 'E01') {
+            alert(error.response.data.data);
+            return;
+          }
+        }
+        myErrorStore.setErrorInfo(error);
+        router.replace('/error');
+    }
   } else {
     // 유효성 검사 실패 패턴
     alert(`${resultValidationEmail}\n${resultValidationPassword}`);

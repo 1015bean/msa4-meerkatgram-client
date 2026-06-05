@@ -3,21 +3,22 @@ import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePostShowStore } from '../../store/post/usePostShowStore';
 import { useAuthStore } from '../../store/auth/useAuthStore';
+import useMyErrorStore from '../../store/errors/useMyErrorStore';
 
 
 const route = useRoute();
 const router = useRouter(); 
 const postShowStore = usePostShowStore();
 const authStore = useAuthStore();
+const myErrorStore = useMyErrorStore();
 
 // (route.params.id): 세그먼트 파라미터로 id 받아옴
 onBeforeMount(async () => {
   try {
     await postShowStore.getPost(route.params.id);
   } catch (error) {
-    const msg = error?.response?.data.data ? error?.response?.data.data : "게시글 획득 실패";
-    alert(msg);
-    router.replace('/');
+    myErrorStore.setErrorInfo(error);
+    router.replace('/error');
   }
 })
 onBeforeUnmount(postShowStore.clearPostShow);

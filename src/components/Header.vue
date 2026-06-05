@@ -59,7 +59,7 @@ const redirectRegistration = () => {
           />
       </div>
   </div>
-
+  <hr>
  </template>
 
 <style scoped>

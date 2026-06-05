@@ -33,13 +33,10 @@ export const useAuthStore = defineStore('authStore', () => {
 
     } catch(error) {
       if(error.response) {
-        if(error.response.data.code === 'E01') {
-          alert(error.response.data.data);
-          return;
-        }
+        console.error(error);
+        
+        throw error;
       }
-      
-      useMyErrorStore().setErrorInfo(error);
     }
   }
 

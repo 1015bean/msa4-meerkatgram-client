@@ -42,7 +42,7 @@ export const passwordChk = (password, passwordChk) => {
 }
 
 export const nick = (val) => {
-  const regex = /^[0-9a-zA-Z]{2, 20}$/;
+  const regex = /^[0-9a-zA-Z_]{2,20}$/;
   if(!val) {
     return "닉네임은 필수입니다.";
   }
