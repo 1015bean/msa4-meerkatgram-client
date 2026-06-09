@@ -4,7 +4,8 @@ import MyError from "../pages/errors/MyError.vue";
 import Login from "../pages/auth/Login.vue";
 import { useAuthStore } from "../store/auth/useAuthStore.js";
 import PostShow from "../pages/posts/PostShow.vue";
-import Registration from "../pages/auth/Registration.vue";;
+import Registration from "../pages/auth/Registration.vue";import PostCreate from "../pages/posts/PostCreate.vue";
+;
 
 // **route(라우트): URL경로(path)와 화면(컴포넌트)을 연결해주는 규칙** 
  // => 이 url(path)일 때, 이 컴포넌트(redirect)를 출력하시오
@@ -44,6 +45,12 @@ const routes = [
   {
     path: '/posts/:id',
     component: PostShow,
+    meta: setMeta(true, false),
+  },
+    // 포스트 작성 관련
+  {
+    path: '/posts/create',
+    component: PostCreate,
     meta: setMeta(true, false),
   },
   // 에러 관련

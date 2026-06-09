@@ -1,4 +1,4 @@
-import { email, nick, password, passwordChk, profile } from "../../rule/userRule";
+import { content, email, image, nick, password, passwordChk, profile } from "../../rule/userRule";
 
 export default {
   email,
@@ -6,4 +6,6 @@ export default {
   passwordChk,
   nick,
   profile,
+  content,
+  image,
 }

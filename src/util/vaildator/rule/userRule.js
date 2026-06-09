@@ -61,3 +61,19 @@ export const profile = (val) => {
 
   return '';
 }
+
+export const content = (val) => {
+  if(!val) {
+    return '게시글은 필수입니다.';
+  }
+
+  return '';
+}
+
+export const image = (val) => {
+  if(!val) {
+    return '이미지는 필수입니다.';
+  }
+
+  return '';
+}
