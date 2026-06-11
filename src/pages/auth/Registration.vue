@@ -43,7 +43,7 @@ const handleSubmit = async () => {
   }
 
   try {
-    await authStore.registration(registrationData)
+    await authStore.registration(registrationData);
     alert("회원가입에 성공했습니다.");
     router.replace('/login');
   } catch(error) {
