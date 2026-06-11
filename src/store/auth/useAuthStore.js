@@ -31,6 +31,7 @@ export const useAuthStore = defineStore('authStore', () => {
       userInfo.value = data.user;
       isLoggedIn.value = true;
 
+      
     } catch(error) {
       if(error.response) {
         console.error(error);
